@@ -40,16 +40,13 @@ public class ProductService {
     public Product getProduct(long id) {
         LOGGER.info("Retrieving product {}", id);
 
-
         // Optional usage explained
 //        Optional<Product> productOptional = productRepository.findById(id);
-//
 //        if (productOptional.isPresent()) {
 //            return productOptional.get();
 //        } else {
 //            throw new ResourceNotfoundException("Product " + id + " not found");
 //        }
-
          return productRepository.findById(id)
                  //lambda expressions
                  .orElseThrow(() -> new ResourceNotfoundException("Product " + id + " not found"));
