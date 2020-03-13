@@ -3,7 +3,7 @@ package org.fasttrackit.onlineshop;
 import org.fasttrackit.onlineshop.domain.Product;
 import org.fasttrackit.onlineshop.exception.ResourceNotfoundException;
 import org.fasttrackit.onlineshop.service.ProductService;
-import org.fasttrackit.onlineshop.transfer.SaveProductRequest;
+import org.fasttrackit.onlineshop.transfer.product.SaveProductRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
