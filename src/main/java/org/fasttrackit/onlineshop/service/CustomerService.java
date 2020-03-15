@@ -6,6 +6,7 @@ import org.fasttrackit.onlineshop.persistance.CustomerRepository;
 import org.fasttrackit.onlineshop.transfer.customer.SaveCustomerRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +31,19 @@ public class CustomerService {
     public Customer getCustomer(long id) {
         LOGGER.info("Retrieving customer {}", id);
 
-
         return customerRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotfoundException("Customer "+id+ " not found"));
+                .orElseThrow(() -> new ResourceNotfoundException("Customer " + id + " not found"));
+    }
+
+    public Customer updateCustomer(long id, SaveCustomerRequest request) {
+        LOGGER.info("Updating customer {}", id);
+        Customer customer = getCustomer(id);
+        BeanUtils.copyProperties(request, customer);
+        return customerRepository.save(customer);
+    }
+
+    public void deleteCustomer(long id) {
+        LOGGER.info("Deleting customer {}",id);
+        customerRepository.deleteById(id);
     }
 }
