@@ -3,6 +3,7 @@ package org.fasttrackit.onlineshop;
 import org.fasttrackit.onlineshop.domain.Customer;
 import org.fasttrackit.onlineshop.exception.ResourceNotfoundException;
 import org.fasttrackit.onlineshop.service.CustomerService;
+import org.fasttrackit.onlineshop.steps.CustomerTestSteps;
 import org.fasttrackit.onlineshop.transfer.customer.SaveCustomerRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,8 @@ public class CustomerServiceIntegrationTests {
 
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private CustomerTestSteps customerTestSteps;
 
     @Test
     void createCustomer_whenCustomerExist_thenReturnCustomer() {
@@ -55,7 +58,7 @@ public class CustomerServiceIntegrationTests {
 
     @Test
     void getCustomer_whenNonExistingCustomer_thenThrowResourceNotFoundExceptionError() {
-        Assertions.assertThrows(ResourceNotfoundException.class, ()->customerService.getCustomer(99999999));
+        Assertions.assertThrows(ResourceNotfoundException.class, () -> customerService.getCustomer(99999999));
     }
 
     @Test
@@ -78,23 +81,14 @@ public class CustomerServiceIntegrationTests {
     void deletingCustomer_whenCustomerExist_thenNonExistingAnymore() {
         Customer customer = createCustomer();
         customerService.deleteCustomer(customer.getId());
-        Assertions.assertThrows(ResourceNotfoundException.class, ()-> customerService.getCustomer(customer.getId()));
+        Assertions.assertThrows(ResourceNotfoundException.class, () -> customerService.getCustomer(customer.getId()));
 
     }
 
+    @Test
     private Customer createCustomer() {
-        SaveCustomerRequest request = new SaveCustomerRequest();
-        request.setFirstName("Andrei");
-        request.setLastName("Romanciuc");
+        return customerTestSteps.createCustomer();
 
-        Customer customer = customerService.createCustomer(request);
-
-        assertThat(customer, notNullValue());
-        assertThat(customer.getId(), greaterThan(0L));
-        assertThat(customer.getFirstName(), is(request.getFirstName()));
-        assertThat(customer.getLastName(), is(request.getLastName()));
-
-        return customer;
     }
 
 

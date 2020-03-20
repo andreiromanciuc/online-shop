@@ -1,5 +1,6 @@
 package org.fasttrackit.onlineshop.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.fasttrackit.onlineshop.domain.Customer;
 import org.fasttrackit.onlineshop.exception.ResourceNotfoundException;
 import org.fasttrackit.onlineshop.persistance.CustomerRepository;
@@ -14,17 +15,20 @@ import org.springframework.stereotype.Service;
 public class CustomerService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
     private CustomerRepository customerRepository;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository) {
+    public CustomerService(CustomerRepository customerRepository, ObjectMapper objectMapper) {
         this.customerRepository = customerRepository;
+        this.objectMapper = objectMapper;
     }
+
+
 
     public Customer createCustomer(SaveCustomerRequest request) {
         LOGGER.info("Creating customer {}", request);
-        Customer customer = new Customer();
-        customer.setFirstName(request.getFirstName());
-        customer.setLastName(request.getLastName());
+
+        Customer customer = objectMapper.convertValue(request, Customer.class);
         return customerRepository.save(customer);
     }
 
