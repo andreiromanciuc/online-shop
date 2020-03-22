@@ -2,6 +2,7 @@ package org.fasttrackit.onlineshop.service;
 
 import org.fasttrackit.onlineshop.domain.Cart;
 import org.fasttrackit.onlineshop.domain.Customer;
+import org.fasttrackit.onlineshop.domain.Product;
 import org.fasttrackit.onlineshop.persistance.CartRepository;
 import org.fasttrackit.onlineshop.transfer.cart.AddProductsToCartRequest;
 import org.slf4j.Logger;
@@ -18,11 +19,13 @@ public class CartService {
 
     private final CartRepository cartRepository;
     private final CustomerService customerService;
+    private final ProductService productService;
 
     @Autowired
-    public CartService(CartRepository cartRepository, CustomerService customerService) {
+    public CartService(CartRepository cartRepository, CustomerService customerService, ProductService productService) {
         this.cartRepository = cartRepository;
         this.customerService = customerService;
+        this.productService = productService;
     }
 
     @Transactional
@@ -36,6 +39,12 @@ public class CartService {
             Customer customer = customerService.getCustomer(request.getCustomerId());
             cart.setCustomer(customer);
         }
+
+        for (Long id : request.getProductsIds()) {
+            Product product = productService.getProduct(id);
+            cart.addProductToCart(product);
+        }
+
 
         cartRepository.save(cart);
     }
