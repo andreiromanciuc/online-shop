@@ -4,6 +4,7 @@ import org.fasttrackit.onlineshop.domain.Product;
 import org.fasttrackit.onlineshop.exception.ResourceNotfoundException;
 import org.fasttrackit.onlineshop.service.ProductService;
 import org.fasttrackit.onlineshop.steps.ProductTestSteps;
+import org.fasttrackit.onlineshop.transfer.product.ProductResponse;
 import org.fasttrackit.onlineshop.transfer.product.SaveProductRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -46,9 +47,9 @@ public class ProductServiceIntegrationTests {
     }
     @Test
     void getProducts_whenExistingProduct_thenReturnProduct() {
-        Product product = createProduct();
+        ProductResponse product = createProduct();
 
-        Product response = productService.getProduct(product.getId());
+        ProductResponse response = productService.getProduct(product.getId());
 
         assertThat(response, notNullValue());
         assertThat(response.getId(), is(product.getId()));
@@ -65,7 +66,7 @@ public class ProductServiceIntegrationTests {
 
     @Test
     void updateProduct_whenValidRequest_thenReturnUpdatedProduct() {
-        Product product = createProduct();
+        ProductResponse product = createProduct();
 
         SaveProductRequest request = new SaveProductRequest();
         request.setName(product.getName()+" updated");
@@ -73,7 +74,7 @@ public class ProductServiceIntegrationTests {
         request.setPrice(product.getPrice()+56566);
         request.setQuantity(product.getQuantity() + 23336);
 
-        Product updatedProduct = productService.updateProduct(product.getId(), request);
+        ProductResponse updatedProduct = productService.updateProduct(product.getId(), request);
 
         assertThat(updatedProduct, notNullValue());
         assertThat(updatedProduct.getId(), is(product.getId()));
@@ -85,14 +86,14 @@ public class ProductServiceIntegrationTests {
 
     @Test
     void deleteProduct_whenExistingProduct_whenProductDoesNotExistAnyMore() {
-        Product product = createProduct();
+        ProductResponse product = createProduct();
 
         productService.deleteProduct(product.getId());
 
         Assertions.assertThrows(ResourceNotfoundException.class, ()->productService.getProduct(product.getId()));
     }
 
-    private Product createProduct() {
+    private ProductResponse createProduct() {
       return productTestSteps.createProduct();
     }
 
