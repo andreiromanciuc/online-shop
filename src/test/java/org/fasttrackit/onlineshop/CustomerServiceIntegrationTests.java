@@ -9,12 +9,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.TransactionSystemException;
-
 import javax.validation.ConstraintViolationException;
-
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
+
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 
@@ -28,7 +25,7 @@ public class CustomerServiceIntegrationTests {
 
     @Test
     void createCustomer_whenCustomerExist_thenReturnCustomer() {
-        createCustomer();
+        customerTestSteps.createCustomer();
     }
 
     @Test
@@ -46,7 +43,7 @@ public class CustomerServiceIntegrationTests {
 
     @Test
     void getCustomer_whenCustomerExist_thenReturnCustomer() {
-        Customer customer = createCustomer();
+        Customer customer = customerTestSteps.createCustomer();
 
         Customer response = customerService.getCustomer(customer.getId());
 
@@ -63,7 +60,7 @@ public class CustomerServiceIntegrationTests {
 
     @Test
     void updateCustomer_whenValidRequest_thenReturnUpdatedCustomer() {
-        Customer customer = createCustomer();
+        Customer customer = customerTestSteps.createCustomer();
 
         SaveCustomerRequest request = new SaveCustomerRequest();
         request.setFirstName(customer.getFirstName() + "updated");
@@ -79,17 +76,9 @@ public class CustomerServiceIntegrationTests {
 
     @Test
     void deletingCustomer_whenCustomerExist_thenNonExistingAnymore() {
-        Customer customer = createCustomer();
+        Customer customer = customerTestSteps.createCustomer();
         customerService.deleteCustomer(customer.getId());
         Assertions.assertThrows(ResourceNotfoundException.class, () -> customerService.getCustomer(customer.getId()));
 
     }
-
-    @Test
-    private Customer createCustomer() {
-        return customerTestSteps.createCustomer();
-
-    }
-
-
 }

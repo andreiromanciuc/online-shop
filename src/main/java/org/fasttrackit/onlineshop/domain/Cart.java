@@ -23,7 +23,7 @@ public class Cart {
     public void addProductToCart(Product product) {
 //        adding received product to current cart
         products.add(product);
-//        adding current curt to the received product's cart set
+//        adding current cart to the received product's cart set
         product.getCarts().add(this);
     }
 
